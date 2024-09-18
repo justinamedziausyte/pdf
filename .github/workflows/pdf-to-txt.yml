@@ -1,0 +1,34 @@
+name: PDF to TXT
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  convert-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: pip install pymupdf
+
+      - name: Run PDF Conversion Script
+        run: python pdf.py
+
+      - name: Upload output.txt
+        uses: actions/upload-artifact@v2
+        with:
+          name: output-txt
+          path: output.txt
