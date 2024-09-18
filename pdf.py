@@ -22,6 +22,7 @@ for page_num in range(len(doc)):
     
     if not page_text.strip():
         # If no text is found, attempt OCR for Lithuanian
+        print(f"Page {page_num + 1}: No text found, attempting OCR...")
         pix = page.get_pixmap()
         img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
         page_text = pytesseract.image_to_string(img, lang=LANGUAGE)
@@ -32,6 +33,9 @@ for page_num in range(len(doc)):
 
 # Join all extracted content
 text = "\n".join(extracted_content)
+
+# Debugging output for total text
+print(f"Total Text Extracted:\n{text}\n")
 
 # Basic identification for questions and answers (Simple heuristics)
 questions_and_answers = []
@@ -47,6 +51,9 @@ for i, line in enumerate(lines):
                 if answer_line and not any(char in answer_line for char in "?"):
                     possible_answers.append(answer_line)
         questions_and_answers.append((question, possible_answers))
+
+# Debugging output for identified questions and answers
+print(f"Questions and Answers Found:\n{questions_and_answers}\n")
 
 # Write the detected questions and answers to an output file
 with open("output.txt", "w") as f:
